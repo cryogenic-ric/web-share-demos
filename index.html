@@ -14,12 +14,13 @@
         color: #d22;
       }
       p {
-        width: max-content;
-        padding: 2px 15px;
+        width: auto;
+        padding: 5px 10px;
         border-radius: 20px;
       }
       input {
         display: block;
+        font-size: 16px;;
         padding: 5px 10px;
         border: 1px solid #999;
         border-radius: 10px;
@@ -57,10 +58,10 @@
       <p class="" id="linkShareEnabled">😱Your browser supports Link Share!</p>
     </div>
 
-    <input type="text" id="inputTitle" placeholder="Title"></input>
-    <input type="text" id="inputDescription" placeholder="Description"></input>
-    <input type="url" id="inputUrl" placeholder="Link" size="40">
-    <input type="file" id="files"  multiple>
+    <input type="text" id="inputTitle" placeholder="Title" value="Hello buddy"></input>
+    <input type="text" id="inputDescription" placeholder="Description" value="Grab a coffee"></input>
+    <input type="url" id="inputUrl" placeholder="Link" size="20" value="https://example.com">
+    <input type="file" id="inputFiles"  multiple>
     <input type="button" id="share"  value="Share" onclick="onShareClick()">
 
     <script>
@@ -71,31 +72,31 @@
       const inputTitle = document.getElementById('inputTitle');
       const inputDescription = document.getElementById('inputDescription');
       const inputUrl = document.getElementById('inputUrl');
-      const files = document.getElementById('files');
+      const inputFiles = document.getElementById('inputFiles');
 
       function webShareSupport() {
 
         if (navigator.share === undefined) {
           linkShareEnabled.classList.add('red');
-          linkShareEnabled.innerHTML = "💩Oops! Your browser doesn't support native web share.";
+          linkShareEnabled.innerHTML = "💩 Browser doesn't support native web share.";
           
         } else {
           if (navigator.canShare === undefined) {
             linkShareEnabled.classList.add('orange');
-            linkShareEnabled.innerHTML = "🤨 Your browser supports link share but not file share";
+            linkShareEnabled.innerHTML = "🤨 Browser supports link share but not file share";
           } else {
             linkShareEnabled.classList.add('green');
-            linkShareEnabled.innerHTML = "😱 Your browser supports link share and file share.";
+            linkShareEnabled.innerHTML = "😱 Browser supports link share and file share.";
           }
         }
       }
 
       async function onShareClick() {
-        const files = files.value;
-        const inputTitle = inputTitle.value;
-        const inputDescription = inputDescription.value;
-        const inputUrl = inputUrl.value;
-        await navigator.share({files, inputTitle, inputDescription, inputUrl});
+        const files = inputFiles.files;
+        const title = inputTitle.value;
+        const description = inputDescription.value;
+        const url = inputUrl.value;
+        await navigator.share({files, title, description, url});
       }
 
       function onLoad() {
