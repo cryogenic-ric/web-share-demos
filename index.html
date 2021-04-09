@@ -103,12 +103,6 @@
         }
       }
 
-      const createFileList = (file) => {
-        const fileList = new FileList();
-        fileList[0] = file;
-        return fileList;
-      }
-
       function onDownloadClick () {
         let xhr = new XMLHttpRequest();
         let image = inputDownloadUrl.value;
@@ -120,7 +114,7 @@
                 //When request is done
                 //xhr.response will be a Blob ready to save
 
-                var file = new File([xhr.response], "file.jpg");
+                var file = new File([xhr.response], "file.jpg", {type: "image/jpeg",});
                 console.log(file)
                 uploadedFile = [file];
                 console.log({uploadedFile});
