@@ -13,18 +13,31 @@
       .error {
         color: #d22;
       }
+      p {
+        width: max-content;
+        padding: 2px 15px;
+        border-radius: 20px;
+      }
+      .red {
+        color: #fff;
+        background-color: #f44336;
+      }
+      .green {
+        color: #fff;
+        background-color: #4CAF50;
+      }
       .hide {
         display:none;
       }
       </style>
   </head>
   <body>
-    <h1>Web Share Demos</h1>
+    <h3>Web Share Demos</h3>
     <div class="support Notification">
       <p class="green hide" id="linkShareEnabled">Your browser supports Link Share!</p>
-      <p class="red hide" id="linkShareDisabled">Oops! Your browser doesn't support Link Share.</p>
+      <p class="red hide" id="linkShareDisabled">💩Oops! Your browser doesn't support Link Share.</p>
       <p class="green hide" id="fileShareEnabled">Your browser supports File Share!</p>
-      <p class="red hide" id="fileShareDisabled">Oops! Your browser doesn't support File Share.</p>
+      <p class="red hide" id="fileShareDisabled">💩Oops! Your browser doesn't support File Share.</p>
       <div>
 
     <input type="text" id="inputTitle" placeholder="Title"></input>
@@ -44,6 +57,13 @@
         if (navigator.share === undefined) {
           linkShareDisabled.classList.remove('hide');
           fileShareDisabled.classList.remove('hide');
+        } else {
+          linkShareEnabled.classList.remove('hide');
+          if (navigator.canShare) {
+            fileShareEnabled.classList.remove('hide');
+          } else {
+            fileShareDisabled.classList.remove('hide');
+          }
         }
       }
 
