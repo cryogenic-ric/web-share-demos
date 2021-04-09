@@ -18,9 +18,29 @@
         padding: 2px 15px;
         border-radius: 20px;
       }
+      input {
+        display: block;
+        padding: 5px 10px;
+        border: 1px solid #999;
+        border-radius: 10px;
+        min-height: 20px;
+        min-width: 300px;
+        margin-bottom: 20px;
+      }
+      input[type='button'] {
+        min-width: 200px;
+        min-height: 40px;
+        color: white;
+        background-color: blue;
+        cursor: pointer;
+      }
       .red {
         color: #fff;
         background-color: #f44336;
+      }
+      .orange {
+        color: #fff;
+        background-color: #ff9800;
       }
       .green {
         color: #fff;
@@ -34,37 +54,48 @@
   <body>
     <h3>Web Share Demos</h3>
     <div class="support Notification">
-      <p class="green hide" id="linkShareEnabled">Your browser supports Link Share!</p>
-      <p class="red hide" id="linkShareDisabled">💩Oops! Your browser doesn't support Link Share.</p>
-      <p class="green hide" id="fileShareEnabled">Your browser supports File Share!</p>
-      <p class="red hide" id="fileShareDisabled">💩Oops! Your browser doesn't support File Share.</p>
-      <div>
+      <p class="" id="linkShareEnabled">😱Your browser supports Link Share!</p>
+    </div>
 
     <input type="text" id="inputTitle" placeholder="Title"></input>
     <input type="text" id="inputDescription" placeholder="Description"></input>
     <input type="url" id="inputUrl" placeholder="Link" size="40">
+    <input type="file" id="files"  multiple>
+    <input type="button" id="share"  value="Share" onclick="onShareClick()">
 
     <script>
       'use strict';
 
       const linkShareEnabled = document.getElementById('linkShareEnabled');
-      const linkShareDisabled = document.getElementById('linkShareDisabled');
-      const fileShareEnabled = document.getElementById('fileShareEnabled');
-      const fileShareDisabled = document.getElementById('fileShareDisabled');
 
+      const inputTitle = document.getElementById('inputTitle');
+      const inputDescription = document.getElementById('inputDescription');
+      const inputUrl = document.getElementById('inputUrl');
+      const files = document.getElementById('files');
 
       function webShareSupport() {
+
         if (navigator.share === undefined) {
-          linkShareDisabled.classList.remove('hide');
-          fileShareDisabled.classList.remove('hide');
+          linkShareEnabled.classList.add('red');
+          linkShareEnabled.innerHTML = "💩Oops! Your browser doesn't support native web share.";
+          
         } else {
-          linkShareEnabled.classList.remove('hide');
-          if (navigator.canShare) {
-            fileShareEnabled.classList.remove('hide');
+          if (navigator.canShare === undefined) {
+            linkShareEnabled.classList.add('orange');
+            linkShareEnabled.innerHTML = "🤨 Your browser supports link share but not file share";
           } else {
-            fileShareDisabled.classList.remove('hide');
+            linkShareEnabled.classList.add('green');
+            linkShareEnabled.innerHTML = "😱 Your browser supports link share and file share.";
           }
         }
+      }
+
+      async function onShareClick() {
+        const files = files.value;
+        const inputTitle = inputTitle.value;
+        const inputDescription = inputDescription.value;
+        const inputUrl = inputUrl.value;
+        await navigator.share({files, inputTitle, inputDescription, inputUrl});
       }
 
       function onLoad() {
