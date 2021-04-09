@@ -8,8 +8,51 @@
       content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1.0"
     />
     <title>Web Share Demos</title>
+
+    <style>
+      .error {
+        color: #d22;
+      }
+      .hide {
+        display:none;
+      }
+      </style>
   </head>
   <body>
-    <h1> Hello Web Share!</h1>
+    <h1>Web Share Demos</h1>
+    <div class="support Notification">
+      <p class="green hide" id="linkShareEnabled">Your browser supports Link Share!</p>
+      <p class="red hide" id="linkShareDisabled">Oops! Your browser doesn't support Link Share.</p>
+      <p class="green hide" id="fileShareEnabled">Your browser supports File Share!</p>
+      <p class="red hide" id="fileShareDisabled">Oops! Your browser doesn't support File Share.</p>
+      <div>
+
+    <input type="text" id="inputTitle" placeholder="Title"></input>
+    <input type="text" id="inputDescription" placeholder="Description"></input>
+    <input type="url" id="inputUrl" placeholder="Link" size="40">
+
+    <script>
+      'use strict';
+
+      const linkShareEnabled = document.getElementById('linkShareEnabled');
+      const linkShareDisabled = document.getElementById('linkShareDisabled');
+      const fileShareEnabled = document.getElementById('fileShareEnabled');
+      const fileShareDisabled = document.getElementById('fileShareDisabled');
+
+
+      function webShareSupport() {
+        if (navigator.share === undefined) {
+          linkShareDisabled.classList.remove('hide');
+          fileShareDisabled.classList.remove('hide');
+        }
+      }
+
+      function onLoad() {
+        webShareSupport();
+      }
+
+      window.addEventListener('load', onLoad);
+    </script>
   </body>
 </html>
+
