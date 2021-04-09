@@ -84,7 +84,7 @@
       const inputDownloadUrl = document.getElementById('inputDownloadUrl');
       const errorLog = document.getElementById('errorLog');
 
-      let uploadedFile;
+      let uploadedFile =[];
 
       function webShareSupport() {
 
@@ -114,8 +114,8 @@
                 //When request is done
                 //xhr.response will be a Blob ready to save
                 console.log(xhr.response);
-                uploadedFile = xhr.response;
-                saveAs(xhr.response, 'image.jpeg');
+                uploadedFile.push(xhr.response);
+                console.log({uploadedFile});
             }
         };
         xhr.send();
