@@ -84,7 +84,7 @@
       const inputDownloadUrl = document.getElementById('inputDownloadUrl');
       const errorLog = document.getElementById('errorLog');
 
-      let uploadedFile =[];
+      var uploadedFile;
 
       function webShareSupport() {
 
@@ -103,6 +103,12 @@
         }
       }
 
+      const createFileList = (file) => {
+        const fileList = new FileList();
+        fileList[0] = file;
+        return fileList;
+      }
+
       function onDownloadClick () {
         let xhr = new XMLHttpRequest();
         let image = inputDownloadUrl.value;
@@ -113,8 +119,10 @@
             if (xhr.readyState == xhr.DONE) {
                 //When request is done
                 //xhr.response will be a Blob ready to save
-                console.log(xhr.response);
-                uploadedFile.push(xhr.response);
+
+                var file = new File([xhr.response], "file.jpg");
+                console.log(file)
+                uploadedFile = [file];
                 console.log({uploadedFile});
             }
         };
@@ -122,6 +130,7 @@
       }
 
       async function onShareClick() {
+        console.log(inputFiles.files);
         const files = uploadedFile || inputFiles.files;
         const title = inputTitle.value;
         const description = inputDescription.value;
