@@ -28,7 +28,7 @@
         min-width: 300px;
         margin-bottom: 20px;
       }
-      input[type='button'] {
+      input[id='share'] {
         min-width: 200px;
         min-height: 40px;
         color: white;
@@ -62,7 +62,15 @@
     <input type="text" id="inputDescription" placeholder="Description" value="Grab a coffee"></input>
     <input type="url" id="inputUrl" placeholder="Link" size="20" value="https://example.com">
     <input type="file" id="inputFiles"  multiple>
+
+    OR
+
+    <input type="url" id="inputDownloadUrl" placeholder="Link to Download" value="https://upload.wikimedia.org/wikipedia/commons/d/da/Internet2.jpg" />
+    <input type="button" id="download"  value="Download" onclick="onDownloadClick()">
+
     <input type="button" id="share"  value="Share" onclick="onShareClick()">
+    <p class="red" id="errorLog"></p>
+
 
     <script>
       'use strict';
@@ -73,6 +81,10 @@
       const inputDescription = document.getElementById('inputDescription');
       const inputUrl = document.getElementById('inputUrl');
       const inputFiles = document.getElementById('inputFiles');
+      const inputDownloadUrl = document.getElementById('inputDownloadUrl');
+      const errorLog = document.getElementById('errorLog');
+
+      let uploadedFile;
 
       function webShareSupport() {
 
@@ -91,12 +103,37 @@
         }
       }
 
+      function onDownloadClick () {
+        let xhr = new XMLHttpRequest();
+        let image = inputDownloadUrl.value;
+        xhr.responseType = 'blob';
+        xhr.open('GET', image , true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == xhr.DONE) {
+                //When request is done
+                //xhr.response will be a Blob ready to save
+                console.log(xhr.response);
+                uploadedFile = xhr.response;
+                saveAs(xhr.response, 'image.jpeg');
+            }
+        };
+        xhr.send();
+      }
+
       async function onShareClick() {
-        const files = inputFiles.files;
+        const files = uploadedFile || inputFiles.files;
         const title = inputTitle.value;
         const description = inputDescription.value;
         const url = inputUrl.value;
-        await navigator.share({files, title, description, url});
+        try {
+          await navigator.share({files, title, description, url});
+        } catch (error) {
+          let message = error;
+          console.log(files)
+          errorLog.innerHTML = message;
+        }
+        
       }
 
       function onLoad() {
